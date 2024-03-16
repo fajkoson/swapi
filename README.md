@@ -4,7 +4,7 @@
 
 ## Download
 
-➡ [Download](https://https://github.com/fajkoson/swapi/archive/refs/heads/main.zip) ⬅
+➡ [Download](https://github.com/fajkoson/swapi/archive/refs/heads/main.zip) ⬅
 
 ## Note
 adjust config/config.json if you need to, keep in mind there is limited 
