@@ -2,10 +2,10 @@ import argparse
 import random
 from time import sleep
 from .conf_load import ConfLoader
-from .sw_client import fetch_person, fetch_planet
+from .sw_client import SWFetcher
 from .yaml_mngr import YamlManager
 
-def main(interval=5):
+def main(interval=5) -> None:
     config = ConfLoader().get_config()
    
     # YAML manager init. with output path
@@ -16,13 +16,15 @@ def main(interval=5):
         "planets": []
     }
 
+    fetcher = SWFetcher() 
+
     # generate and fetch data, check for duplicities..
     while (len(output_data["people"]) < config["count_of_people_and_planet"] or
            len(output_data["planets"]) < config["count_of_people_and_planet"]):
         if len(output_data["people"]) < config["count_of_people_and_planet"]:
             person_id = random.randint(1, config["max_person"])
             try:
-                person = fetch_person(person_id)
+                person = fetcher.fetch_person(person_id)
                 if not any(p["name"] == person["name"] for p in output_data["people"]):
                     print(f"fetching person with ID: {person_id} - {person['name']}")
                     output_data["people"].append({"name": person["name"], "height": person["height"]})
@@ -34,7 +36,7 @@ def main(interval=5):
         if len(output_data["planets"]) < config["count_of_people_and_planet"]:
             planet_id = random.randint(1, config["max_planets"])
             try:
-                planet = fetch_planet(planet_id)
+                planet = fetcher.fetch_planet(planet_id)
                 if not any(p["name"] == planet["name"] for p in output_data["planets"]):
                     print(f"fetching planet with ID: {planet_id} - {planet['name']}")
                     output_data["planets"].append({"name": planet["name"], "terrain": planet["terrain"]})

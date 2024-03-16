@@ -2,7 +2,7 @@ import json
 import os
 
 class ConfLoader:
-    def __init__(self):
+    def __init__(self) -> None:
         self.file_path = self.find_conf_path()
         self.config = self.load_config()
 
