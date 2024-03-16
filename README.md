@@ -18,17 +18,15 @@ number of datasets and best is to keep it on default.
 ## Implemented functionalities (more in .docs/origtask.md)
 - must have: done
 - optional tasks: 
-    - create package - done
+    - create package: done
     - todo:
         - call people and planet endpoint asynchronously using asyncio and aiohttp (whole app could be written as async)
         - write basic tests (app is able to starts) for sw world app and output yaml data has correct format
         - mock calling sw api in tests
         - add mypy check within tests
         - create dockerfile for creating app docker image
-    - extras:
-    - todo:
-    - create example of proto file with one service and one call
-    - using grpcio-tools library parse proto file and get name of service and call (could be standalone script)
+        - create example of proto file with one service and one call
+        - using grpcio-tools library parse proto file and get name of service and call (could be standalone script)
 
 ## About
 This branch was created solely for purpose of training.
