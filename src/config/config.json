@@ -1,0 +1,11 @@
+{
+    "output_path": "C:\\SW_OUTPUT",
+    "max_person": 5,
+    "max_planets": 5,
+    "count_of_people_and_planet": 3,
+    "base_url": "https://swapi.dev/api/",
+    "person_url": "https://swapi.dev/api/people/",
+    "planet_url": "https://swapi.dev/api/planets/",
+    "status_code_OK": 200
+  }
+  
