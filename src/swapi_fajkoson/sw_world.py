@@ -8,8 +8,9 @@ from .yaml_mngr import YamlManager
 def main(interval=5) -> None:
     config = ConfLoader().get_config()
    
-    # YAML manager init. with output path
-    yaml_manager = YamlManager(config["output_path"] + "\\output.yaml")
+    # yaml manager init. with output path
+    # added config due to another parameter in YamlManager
+    yaml_manager = YamlManager(config["output_path"] + "\\output.yaml", config)
 
     output_data = {
         "people": [],
@@ -54,8 +55,9 @@ def main(interval=5) -> None:
 
             break
 
-    # write the output into file
-    yaml_manager.write_to_yaml(output_data)
+    # append the data instead of overwriting the file
+    print("Calling append_to_yaml")
+    yaml_manager.append_to_yaml(output_data)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='fetch SWAPI data.')
