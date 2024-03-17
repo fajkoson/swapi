@@ -46,22 +46,7 @@ class YamlManager:
             print(f"error occurred while reading from YAML file: {e}")
             # return a default structure in case of an error
             return {"people": [], "planets": []}  
-    
- #   def append_to_yaml(self, new_data: dict) -> None:
- #       """append new data to existing file"""
- #       existing_data = self.read_from_yaml()
- #       for key in ["people", "planets"]:
- #           # ensure the total count does not exceed the configured limit before append
- #           while (
- #                   len(existing_data[key]) < self.config["count_of_people_and_planet"]
- #                   and len(new_data[key]) > 0
- #           ):
- #               # assuming new_data is pre-loaded with fetched items
- #               item = new_data[key].pop(0)  
- #               if item["name"].strip().lower() not in {e["name"].strip().lower() for e in existing_data[key]}:
- #                   existing_data[key].append(item)
- #       self.write_to_yaml(existing_data)
-    
+          
     def append_to_yaml(self, new_data: dict) -> None:
         """
         appends new data to the existing file, 
@@ -100,13 +85,35 @@ class YamlManager:
             print("[WARNING:] no new data was appended to the OUTPUT file")
 
     def has_new_data_to_append(self, new_data: dict) -> bool:
-        """check if there's new unique data to append"""
+        """
+        this method checks if there are any items in the new data that are not
+        already present in the existing YAML data. It considers data unique based
+        on the 'name' attribute of each item, ignoring case and leading/trailing spaces.
+        """
+        # first, read the existing data from the YAML file.
         existing_data = self.read_from_yaml()
+
+        # iterate through each category
         for key in ["people", "planets"]:
-            existing_names = {item["name"].strip().lower() for item in existing_data.get(key, [])}
+            # extract a set
+            existing_names = set()
+
+            if key in existing_data:
+                for item in existing_data[key]:
+                    # normalize the name of the current item and add it to the set of existing names
+                    normalized_name = item["name"].strip().lower()
+                    existing_names.add(normalized_name)
+
+            # now, iterate through each item in the new data for this category
             for item in new_data[key]:
-                if item["name"].strip().lower() not in existing_names:
-                    # New unique data found
-                    return True  # new unique data found
-        # no new unique data to append
-        return False  
+                # normalize the name of the current item for comparison
+                normalized_new_name = item["name"].strip().lower()
+
+                # check if this normalized new name is not in the set of existing names
+                if normalized_new_name not in existing_names:
+                    # if not, we've found new unique data. Return True immediately
+                    return True
+
+        # if we reach this point, it means we didnt find any new unique data in any category
+        # return False to indicate this
+        return False
