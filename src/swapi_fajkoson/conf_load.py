@@ -2,11 +2,7 @@ import logging
 import json
 import os
 
-logging.basicConfig(
-    level=logging.INFO,  # (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'  
-)
+logger = logging.getLogger(__name__)
 
 class ConfLoader:
     def __init__(self) -> None:
@@ -19,20 +15,20 @@ class ConfLoader:
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
         # path to the config.json
         config_path = os.path.join(base_dir, 'config', 'config.json') 
-        logging.info(f"config path is{config_path}")
+        logger.info(f"config path is: {config_path}")
         return config_path
 
     def load_config(self) -> dict:
         """load config from JSON."""
         try:
             with open(self.file_path, 'r') as file:
-                logging.info("config file has been loaded")
+                logger.info("config file has been loaded")
                 return json.load(file)
         except FileNotFoundError:
-            logging.exception(f"configuration file not found at {self.file_path}: {e}")
+            logger.exception(f"configuration file not found at {self.file_path}: {e}")
             raise
         except json.JSONDecodeError:
-            logging.exception("Error decoding JSON from the configuration file.")
+            logger.exception("Error decoding JSON from the configuration file.")
             raise
 
     def validate_config(self) -> bool:
@@ -45,21 +41,35 @@ class ConfLoader:
             "base_url", 
             "person_url",  
             "planet_url",
-            "status_code_OK" 
+            "status_code_OK",
+            "logging_level"
         ]
 
         for param in req_param:
             if param not in self.config:
-                logging.error(f"Missing required configuration parameter: {param}")
+                logger.error(f"missing required configuration parameter: {param}")
                 raise ValueError(f"missing required configuration parameter: {param}")
-    
+            
+        if "logging_level" in self.config:
+            if not isinstance(self.config["logging_level"], dict):
+                logger.error("logging_level must be a dictionary")
+                raise ValueError("logging_level must be a dictionary")
+            
+            # check if each modules logging level is a valid logging level string
+            valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+            for module, level in self.config["logging_level"].items():
+                if level.upper() not in valid_levels:
+                    logger.error(f"invalid logging level '{level}' for module '{module}'")
+                    raise ValueError(f"invalid logging level '{level}' for module '{module}'")
+
+
         # check ranges
         if not (1 <= self.config["max_person"] <= 82):
-            logging.error("max_person range is 1-82")
+            logger.error("max_person range is 1-82")
             raise ValueError("max_person range is 1-82")
     
         if not (1 <= self.config["max_planets"] <= 60):
-            logging.error("max_planets range is 1-60")
+            logger.error("max_planets range is 1-60")
             raise ValueError("max_planets range is 1-60")
     
         return True
@@ -67,7 +77,7 @@ class ConfLoader:
     def get_config(self) -> dict:
         """get the validated configuration."""
         if self.validate_config():
-            logging.info("configuration has been validated")
+            logger.info("configuration has been validated")
             return self.config
 
 if __name__ == "__main__":

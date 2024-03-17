@@ -6,6 +6,12 @@
     "base_url": "https://swapi.dev/api/",
     "person_url": "https://swapi.dev/api/people/",
     "planet_url": "https://swapi.dev/api/planets/",
-    "status_code_OK": 200
+    "status_code_OK": 200,
+    "logging_level": {
+        "conf_load": "warning",
+        "sw_client": "warning",
+         "sw_world": "warning",
+        "yaml_mngr": "warning"
+    }
   }
   
