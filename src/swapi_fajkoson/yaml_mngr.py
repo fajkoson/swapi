@@ -3,13 +3,16 @@ import os
 
 
 class YamlManager:
+    """ handles yaml file operations"""
+
     def __init__(self, output_path: str, config: dict) -> None:
         if not isinstance(output_path, str):
             raise ValueError("output path must be a string")
         
         self.output_path = output_path
         # pass also the configuration
-        self.config = config 
+        self.config = config
+ 
 
     def write_to_yaml(self, data: dict) -> None:
         """write data to a YAML file"""
@@ -20,14 +23,13 @@ class YamlManager:
             # write data to yaml file
             with open(self.output_path, 'w') as file:
                 yaml.dump(data, file, sort_keys=False)
-            print(f"data successfully written to {self.output_path}")
+            print("data successfully written ")
         except Exception as e:
             print(f"error occurred while writing to YAML file: {e}")
     
     def read_from_yaml(self) -> dict:
         """read data from a YAML file."""
         if not os.path.exists(self.output_path):
-            print(f"no existing YAML file found at {self.output_path}. start fresh.")
             # return default structure in case of non-existing file
             return {"people": [], "planets": []}  
 
@@ -75,7 +77,7 @@ class YamlManager:
                 if len(existing_data[key]) >= self.config["count_of_people_and_planet"]:
                     # if the count has reached the limit, log a warning and skip appending
                     print(
-                        f"[Warning:] the limit of {self.config['count_of_people_and_planet']} "
+                        f"[WARNING:] the limit of {self.config['count_of_people_and_planet']} "
                         f"for {key} has been reached. No more data will be appended."
                     )
                     # exit the loop <-> limit is reached
@@ -87,7 +89,7 @@ class YamlManager:
                     new_data_appended = True
                 else:
                     # log a warning if the item is a duplicate
-                    print(f"[Warning:] {item['name']} is already included in {key}")
+                    print(f"[WARNING:] {item['name']} is already included in {key}")
 
         if new_data_appended:
             # if any new data was appended, write the updated data to the file
@@ -95,4 +97,16 @@ class YamlManager:
             print(f"new data successfully appended to {self.output_path}")
         else:
             # if no new data was appended, inform the user
-            print("[Warning:] no new data was appended to the OUTPUT file")
+            print("[WARNING:] no new data was appended to the OUTPUT file")
+
+    def has_new_data_to_append(self, new_data: dict) -> bool:
+        """check if there's new unique data to append"""
+        existing_data = self.read_from_yaml()
+        for key in ["people", "planets"]:
+            existing_names = {item["name"].strip().lower() for item in existing_data.get(key, [])}
+            for item in new_data[key]:
+                if item["name"].strip().lower() not in existing_names:
+                    # New unique data found
+                    return True  # new unique data found
+        # no new unique data to append
+        return False  

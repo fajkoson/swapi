@@ -1,5 +1,6 @@
 import argparse
 import random
+import os
 from time import sleep
 from .conf_load import ConfLoader
 from .sw_client import SWFetcher
@@ -11,6 +12,10 @@ def main(interval=5) -> None:
     # yaml manager init. with output path
     # added config due to another parameter in YamlManager
     yaml_manager = YamlManager(config["output_path"] + "\\output.yaml", config)
+
+    # check for the file existence once at the start
+    if not os.path.exists(config["output_path"] + "\\output.yaml"):
+        print(f"[INFO:] no existing YAML file found at {config['output_path']}\\output.yaml. start fresh")
 
     output_data = {
         "people": [],
@@ -54,10 +59,13 @@ def main(interval=5) -> None:
             len(output_data["planets"]) >= config["count_of_people_and_planet"]):
 
             break
-
-    # append the data instead of overwriting the file
-    print("Calling append_to_yaml")
-    yaml_manager.append_to_yaml(output_data)
+    # check if there anything to new append
+    if yaml_manager.has_new_data_to_append(output_data):
+        # append the data instead of overwriting the file
+        print("calling append_to_yaml")
+        yaml_manager.append_to_yaml(output_data)
+    else:
+        print("[Info] no new unique data to append. The OUTPUT file remains unchanged.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='fetch SWAPI data.')
