@@ -56,7 +56,7 @@ class ConfLoader:
                 raise ValueError("logging_level must be a dictionary")
             
             # check if each modules logging level is a valid logging level string
-            valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+            valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "EXCEPTION"]
             for module, level in self.config["logging_level"].items():
                 if level.upper() not in valid_levels:
                     logger.error(f"invalid logging level '{level}' for module '{module}'")
