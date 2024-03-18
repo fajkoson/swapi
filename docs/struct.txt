@@ -4,15 +4,15 @@ SWAPI/
 |   |-- struct.txt          # structure documentation
 |
 |-- src/
+|   |--config/
+|   |   |-- config.json     # configuration
+|   |
 |   |-- swapi_fajkoson/
 |       |-- __init__.py
 |       |-- conf_load.py    # config loader
 |       |-- sw_world.py     # main function
 |       |-- sw_client.py    # SWAPI client connecting to the API
 |       |-- yaml_mngr.py    # manages YAML output
-|
-|-- config/
-|   |-- config.json         # configuration
 |
 |-- tests/
 |   |-- placeholder.py      # tests ...

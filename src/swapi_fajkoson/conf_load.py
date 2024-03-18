@@ -11,9 +11,9 @@ class ConfLoader:
 
     def find_conf_path(self) -> str:
         """find dynamic path to config.json."""
-        # project root (../SWAPI)
+        # project root (../SWAPI/src/)
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
-        # path to the config.json
+        # path to the config.json (../SWAPI/src/config/)
         config_path = os.path.join(base_dir, 'config', 'config.json') 
         logger.info(f"config path is: {config_path}")
         return config_path
