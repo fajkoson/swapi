@@ -8,12 +8,23 @@ from .yaml_mngr import YamlManager
 
 def main(interval=5) -> None:
     config = ConfLoader().get_config()
+    # basic log config
     logging.basicConfig(
-    level=getattr(logging, config.get("log_level", "INFO").upper(), logging.INFO),
+        level=logging.ERROR,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%Y/%m/%d %H:%M:%S'
     )
+
     logger = logging.getLogger(__name__)
+
+    for module, level_str in config.get("logging_level", {}).items():
+        level = getattr(logging, level_str.upper(), None)
+        if level is not None:
+            specific_logger = logging.getLogger(module)
+            specific_logger.setLevel(level)
+            specific_logger.propagate = True
+        else:
+            logging.warning(f"invalid logging level: {level_str} for module: {module}")
 
     # yaml manager init. with output path
     # added config due to another parameter in YamlManager

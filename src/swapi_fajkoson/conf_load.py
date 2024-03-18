@@ -24,12 +24,12 @@ class ConfLoader:
             with open(self.file_path, 'r') as file:
                 logger.info("config file has been loaded")
                 return json.load(file)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             logger.exception(f"configuration file not found at {self.file_path}: {e}")
-            raise
+            raise e
         except json.JSONDecodeError:
             logger.exception("Error decoding JSON from the configuration file.")
-            raise
+            raise e
 
     def validate_config(self) -> bool:
         """validate the configuration."""
