@@ -10,7 +10,7 @@ def main(interval=5) -> None:
     config = ConfLoader().get_config()
     logging.basicConfig(
     level=getattr(logging, config.get("log_level", "INFO").upper(), logging.INFO),
-        format='%(asctime)s - %(levelname)s - %(message)s',
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%Y/%m/%d %H:%M:%S'
     )
     logger = logging.getLogger(__name__)

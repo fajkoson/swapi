@@ -34,15 +34,13 @@ class YamlManager:
     def read_from_yaml(self) -> dict:
         """read data from a YAML file."""
         if not os.path.exists(self.output_path):
-            # return default structure in case of non-existing file
-            logger.info(f"No existing YAML file found at {self.output_path}. Starting fresh.")
             return {"people": [], "planets": []}  
 
         try:
             with open(self.output_path, 'r') as file:
                 data = yaml.safe_load(file)
                 if data is None:
-                    logging.info(f"existing yaml file at {self.output_path} is empty")
+                    logger.info(f"existing yaml file at {self.output_path} is empty")
                     # return a default structure in case of empty file
                     return {"people": [], "planets": []}  
                 # otherwise return content of the file
