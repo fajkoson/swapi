@@ -1,12 +1,14 @@
 import argparse
 import random
 import logging
-from time import sleep
+import asyncio
 from .conf_load import ConfLoader
 from .sw_client import SWFetcher
 from .yaml_mngr import YamlManager
+from .decorators import time_decorator
 
-def main(interval=5) -> None:
+@time_decorator
+async def main(interval=5) -> None:
     config = ConfLoader().get_config()
     # basic log config
     logging.basicConfig(
@@ -43,29 +45,29 @@ def main(interval=5) -> None:
         if len(output_data["people"]) < config["count_of_people_and_planet"]:
             person_id = random.randint(1, config["max_person"])
             try:
-                person = fetcher.fetch_person(person_id)
+                person = await fetcher.fetch_person(person_id)
                 if not any(p["name"] == person["name"] for p in output_data["people"]):
                     logger.info(f"fetching person with ID: {person_id} - {person['name']}")
                     output_data["people"].append({"name": person["name"], "height": person["height"]})
                 else:
-                    logger.warning(f"Person '{person['name']}' is already included.")
+                    logger.warning(f"person '{person['name']}' is already included.")
             except Exception as e:
                 logger.error(f"an error occurred while fetching person with ID {person_id}: {e}")
 
         if len(output_data["planets"]) < config["count_of_people_and_planet"]:
             planet_id = random.randint(1, config["max_planets"])
             try:
-                planet = fetcher.fetch_planet(planet_id)
+                planet = await fetcher.fetch_planet(planet_id)
                 if not any(p["name"] == planet["name"] for p in output_data["planets"]):
                     logger.info(f"fetching planet with ID: {planet_id} - {planet['name']}")
                     output_data["planets"].append({"name": planet["name"], "terrain": planet["terrain"]})
                 else:
-                    logger.warning(f"Planet '{planet['name']}' is already included")
+                    logger.warning(f"planet '{planet['name']}' is already included")
             except Exception as e:
                 logger.error(f"an error occurred while fetching planet with ID {planet_id}: {e}")
 
         # wait for interval [sec]
-        sleep(interval)
+        await asyncio.sleep(interval)
 
         # break the loop if both limits were reached
         if (len(output_data["people"]) >= config["count_of_people_and_planet"] and
@@ -73,9 +75,9 @@ def main(interval=5) -> None:
 
             break
     # check if there anything to new append
-    if yaml_manager.has_new_data_to_append(output_data):
+    if await yaml_manager.has_new_data_to_append(output_data):
         # append the data instead of overwriting the file
-        yaml_manager.append_to_yaml(output_data)
+        await yaml_manager.append_to_yaml(output_data)
     else:
         logger.warning("no new unique data to append. The OUTPUT file remains unchanged")
 
@@ -83,6 +85,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='fetch SWAPI data.')
     parser.add_argument('--interval', type=int, default=5, help='interval in seconds')
     args = parser.parse_args()
-    main(args.interval)
+    #main(args.interval)
+    asyncio.run(main(args.interval))
 
-
+def run_main():
+    """entry point for setup tools"""
+    parser = argparse.ArgumentParser(description='fetch SWAPI data.')
+    parser.add_argument('--interval', type=int, default=5, help='interval in seconds')
+    args = parser.parse_args()
+    asyncio.run(main(args.interval))

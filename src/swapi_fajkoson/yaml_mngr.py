@@ -1,6 +1,9 @@
+import aiofiles
+import asyncio
 import yaml
 import os
 import logging
+from .decorators import time_decorator
 
 
 logger = logging.getLogger(__name__)
@@ -16,29 +19,31 @@ class YamlManager:
         self.output_path = output_path
         # pass also the configuration
         self.config = config
- 
 
-    def write_to_yaml(self, data: dict) -> None:
+    @time_decorator
+    async def write_to_yaml(self, data: dict) -> None:
         """write data to a YAML file"""
         try:
             # create dir. if it doesnt exist
             os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
-            
+            # convert the data into yaml first before writting
+            yaml_data = yaml.dump(data, sort_keys=False)
             # write data to yaml file
-            with open(self.output_path, 'w') as file:
-                yaml.dump(data, file, sort_keys=False)
+            async with aiofiles.open(self.output_path, 'w') as file:
+                await file.write(yaml_data)
             logger.info("data written correctly")
         except Exception as e:
             logger.error(f"while writing to YAML file: {e}")
-    
-    def read_from_yaml(self) -> dict:
+
+    @time_decorator
+    async def read_from_yaml(self) -> dict:
         """read data from a YAML file."""
         if not os.path.exists(self.output_path):
             return {"people": [], "planets": []}  
 
         try:
-            with open(self.output_path, 'r') as file:
-                data = yaml.safe_load(file)
+            async with aiofiles.open(self.output_path, 'r') as file:
+                data = yaml.safe_load(await file.read()) or {"people": [], "planets": []}
                 if data is None:
                     logger.info(f"existing yaml file at {self.output_path} is empty")
                     # return a default structure in case of empty file
@@ -48,20 +53,25 @@ class YamlManager:
         except Exception as e:
             logger.error(f"error occurred while reading from YAML file: {e}")
             # return a default structure in case of an error
-            return {"people": [], "planets": []}  
+            return {"people": [], "planets": []}
           
-    def append_to_yaml(self, new_data: dict) -> None:
+    @time_decorator      
+    async def append_to_yaml(self, new_data: dict) -> None:
         """
         appends new data to the existing file, 
         with warnings if data is not appended
         """
-        existing_data = self.read_from_yaml()
+        existing_data = await self.read_from_yaml()
 
-        # flags to track if any new data was appended
+        # flag to track if any new data was appended
         new_data_appended = False
 
         for key in ["people", "planets"]:
+            existing_names = {item["name"].strip().lower() for item in existing_data[key]}
+
             for item in new_data[key]:
+                normalized_new_name = item["name"].strip().lower()
+
                 if len(existing_data[key]) >= self.config["count_of_people_and_planet"]:
                     # if the count has reached the limit, log a warning and skip appending
                     logger.warning(
@@ -72,7 +82,7 @@ class YamlManager:
                     break  
 
                 # check for duplicates
-                if item["name"].strip().lower() not in {e["name"].strip().lower() for e in existing_data[key]}:
+                if normalized_new_name not in existing_names:
                     existing_data[key].append(item)
                     new_data_appended = True
                 else:
@@ -81,20 +91,21 @@ class YamlManager:
 
         if new_data_appended:
             # if any new data was appended, write the updated data to the file
-            self.write_to_yaml(existing_data)
+            await self.write_to_yaml(existing_data)
             logger.info(f"new data successfully appended to {self.output_path}")
         else:
             # if no new data was appended, inform the user
             logger.warning("no new data was appended to the OUTPUT file")
 
-    def has_new_data_to_append(self, new_data: dict) -> bool:
+    @time_decorator 
+    async def has_new_data_to_append(self, new_data: dict) -> bool:
         """
         this method checks if there are any items in the new data that are not
         already present in the existing YAML data. It considers data unique based
         on the 'name' attribute of each item, ignoring case and leading/trailing spaces.
         """
         # first, read the existing data from the YAML file.
-        existing_data = self.read_from_yaml()
+        existing_data = await self.read_from_yaml()
 
         # iterate through each category
         for key in ["people", "planets"]:

@@ -9,7 +9,6 @@ setup(
     packages=find_packages(where='src'),  
     package_dir={'': 'src'},  
     install_requires=[
-        'requests',
         'aiohttp',
         'PyYAML',
         
@@ -18,7 +17,7 @@ setup(
     
     entry_points={
         'console_scripts': [
-            'swapi_fajkoson=swapi_fajkoson.sw_world:main',
+            'swapi_fajkoson=swapi_fajkoson.sw_world:run_main',
             
         ],
     },

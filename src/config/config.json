@@ -8,10 +8,12 @@
     "planet_url": "https://swapi.dev/api/planets/",
     "status_code_OK": 200,
     "logging_level": {
-        "swapi_fajkoson.conf_load": "ERROR",
-        "swapi_fajkoson.sw_client": "ERROR",
+        "swapi_fajkoson.conf_load": "INFO",
+        "swapi_fajkoson.sw_client": "INFO",
         "swapi_fajkoson.sw_world": "INFO",
-        "swapi_fajkoson.yaml_mngr": "WARNING"
+        "swapi_fajkoson.yaml_mngr": "INFO",
+        "swapi_fajkoson.decorators": "INFO"
+
     }
   }
   
