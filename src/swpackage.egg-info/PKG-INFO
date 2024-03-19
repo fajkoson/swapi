@@ -1,11 +1,10 @@
 Metadata-Version: 2.1
-Name: swapi_fajkoson
+Name: swpackage
 Version: 0.1.0
 Summary: a python project to interact with the Star Wars API
 Author: fajkoson
 Author-email: notsharing@sorryboys.com
 Requires-Python: >=3.6
 License-File: LICENSE
-Requires-Dist: requests
 Requires-Dist: aiohttp
 Requires-Dist: PyYAML

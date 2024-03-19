@@ -8,11 +8,11 @@
     "planet_url": "https://swapi.dev/api/planets/",
     "status_code_OK": 200,
     "logging_level": {
-        "swapi_fajkoson.conf_load": "INFO",
-        "swapi_fajkoson.sw_client": "INFO",
-        "swapi_fajkoson.sw_world": "INFO",
-        "swapi_fajkoson.yaml_mngr": "INFO",
-        "swapi_fajkoson.decorators": "INFO"
+        "swpackage.conf_load": "INFO",
+        "swpackage.sw_client": "INFO",
+        "swpackage.sw_world": "INFO",
+        "swpackage.yaml_mngr": "INFO",
+        "swpackage.decorators": "INFO"
 
     }
   }

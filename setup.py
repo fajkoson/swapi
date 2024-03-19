@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='swapi_fajkoson',
+    name='swpackage',
     version='0.1.0',
     description='a python project to interact with the Star Wars API',
     author='fajkoson',
@@ -17,7 +17,7 @@ setup(
     
     entry_points={
         'console_scripts': [
-            'swapi_fajkoson=swapi_fajkoson.sw_world:run_main',
+            'swpackage=swpackage.sw_world:run_main',
             
         ],
     },

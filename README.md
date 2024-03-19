@@ -11,8 +11,8 @@ adjust config/config.json if you need to, keep in mind there is limited
 number of datasets and best is to keep it on default.
 
 ## Examples of usage
-- eg1.: swapi_fajkoson
-- eg2.: swapi_fajkoson --interval 3 (default interval is 5 sec)
+- eg1.: swpackage
+- eg2.: swpackage --interval 3 (default interval is 5 sec)
 
 
 ## Implemented functionalities (more in .docs/origtask.md)

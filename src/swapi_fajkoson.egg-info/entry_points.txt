@@ -1,2 +1,0 @@
-[console_scripts]
-swapi_fajkoson = swapi_fajkoson.sw_world:run_main
