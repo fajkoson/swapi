@@ -2,18 +2,26 @@ from setuptools import setup, find_packages
 
 setup(
     name='swpackage',
-    version='0.1.0',
+    version='1.0.0',
     description='a python project to interact with the Star Wars API',
     author='fajkoson',
     author_email='notsharing@sorryboys.com',
+    url='https://github.com/fajkoson/swapi/',
     packages=find_packages(where='src'),  
-    package_dir={'': 'src'},  
+    package_dir={'': 'src'},
+    python_requires='>=3.12',  
     install_requires=[
-        'aiohttp',
-        'PyYAML',
-        
+        'aiohttp>=3.7.4',
+        'PyYAML>=6.0.1',
+        'aiofiles>=23.2.1',    
     ],
-    python_requires='>=3.6',  
+    extras_require={
+        'dev': [
+            'pytest>=6.2.2', 
+            'pytest-asyncio>=0.14.0',
+            'mypy>=1.9.0',
+        ],
+    }, 
     
     entry_points={
         'console_scripts': [

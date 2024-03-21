@@ -1,10 +1,16 @@
 Metadata-Version: 2.1
 Name: swpackage
-Version: 0.1.0
+Version: 1.0.0
 Summary: a python project to interact with the Star Wars API
+Home-page: https://github.com/fajkoson/swapi/
 Author: fajkoson
 Author-email: notsharing@sorryboys.com
-Requires-Python: >=3.6
+Requires-Python: >=3.12
 License-File: LICENSE
-Requires-Dist: aiohttp
-Requires-Dist: PyYAML
+Requires-Dist: aiohttp>=3.7.4
+Requires-Dist: PyYAML>=6.0.1
+Requires-Dist: aiofiles>=23.2.1
+Provides-Extra: dev
+Requires-Dist: pytest>=6.2.2; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.14.0; extra == "dev"
+Requires-Dist: mypy>=1.9.0; extra == "dev"

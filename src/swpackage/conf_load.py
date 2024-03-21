@@ -19,11 +19,20 @@ class ConfLoader:
         return config_path
 
     def load_config(self) -> dict:
-        """load config from JSON."""
+        """load config from JSON."""  
         try:
             with open(self.file_path, 'r') as file:
+                self.config = json.load(file)
                 logger.info("config file has been loaded")
-                return json.load(file)
+
+            running_in_container = os.getenv("RUNNING_IN_CONTAINER", "false").lower() == "true"
+
+            if running_in_container:
+                self.config['output_path'] = self.config.get('container_output_path', '/app/data')
+            else:
+                self.config['output_path'] = self.config.get('default_output_path', 'C:\\SW_OUTPUT')
+            return self.config
+        
         except FileNotFoundError as e:
             logger.exception(f"configuration file not found at {self.file_path}: {e}")
             raise e
@@ -34,7 +43,8 @@ class ConfLoader:
     def validate_config(self) -> bool:
         """validate the configuration."""
         req_param = [
-            "output_path", 
+            "default_output_path",
+            "container_output_path", 
             "max_person", 
             "max_planets", 
             "count_of_people_and_planet",

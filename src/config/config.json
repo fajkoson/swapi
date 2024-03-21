@@ -1,5 +1,6 @@
 {
-    "output_path": "C:\\SW_OUTPUT",
+    "default_output_path": "C:\\SW_OUTPUT",
+    "container_output_path": "/app/data",
     "max_person": 5,
     "max_planets": 5,
     "count_of_people_and_planet": 3,

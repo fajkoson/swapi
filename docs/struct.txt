@@ -7,17 +7,20 @@ SWAPI/
 |   |--config/
 |   |   |-- config.json     # configuration
 |   |
-|   |-- swapi_fajkoson/
+|   |-- swpackage/
 |       |-- __init__.py
 |       |-- conf_load.py    # config loader
 |       |-- sw_world.py     # main function
 |       |-- sw_client.py    # SWAPI client connecting to the API
 |       |-- yaml_mngr.py    # manages YAML output
+|       |-- decorators.py   # some decorators
 |
 |-- tests/
 |   |-- placeholder.py      # tests ...
 |
+|-- .dockerignore
 |-- .gitignore
 |-- MANIFEST.in             # include for config.json
-|-- setup.py                
+|-- setup.py
+|-- Dockerfile                
 |-- EOF

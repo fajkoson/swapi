@@ -1,13 +1,13 @@
 import logging
 import aiohttp
-# from .conf_load import ConfLoader
-from .decorators import time_decorator
+from swpackage.decorators import time_decorator
 
 logger = logging.getLogger(__name__)
 
 class SWFetcher:
     def __init__(self, config) -> None:
         self.config = config
+
     @time_decorator
     async def fetch_person(self, person_id: int) -> dict:
         """fetch person by ID and return name and height"""

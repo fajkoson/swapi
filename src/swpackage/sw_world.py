@@ -2,10 +2,10 @@ import argparse
 import random
 import logging
 import asyncio
-from .conf_load import ConfLoader
-from .sw_client import SWFetcher
-from .yaml_mngr import YamlManager
-from .decorators import time_decorator
+from swpackage.conf_load import ConfLoader
+from swpackage.sw_client import SWFetcher
+from swpackage.yaml_mngr import YamlManager
+from swpackage.decorators import time_decorator
 
 @time_decorator
 async def main(interval=5) -> None:

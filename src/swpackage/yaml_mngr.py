@@ -3,7 +3,7 @@ import asyncio
 import yaml
 import os
 import logging
-from .decorators import time_decorator
+from swpackage.decorators import time_decorator
 
 
 logger = logging.getLogger(__name__)
