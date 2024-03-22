@@ -1,2 +1,0 @@
-[console_scripts]
-swpackage = swpackage.sw_world:run_main

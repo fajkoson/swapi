@@ -21,7 +21,7 @@ number of datasets and best is to keep it on default.
     - done:
         - create package
         - whole app rewritten as async
-        - create dockerfile for creating app docker image (guide in .docs/docker.txt)
+        - create dockerfile for creating app docker image (guide in .docs/docker.md)
     - todo:
         - write basic tests (app is able to starts) for sw world app and output yaml data has correct format
         - mock calling sw api in tests
