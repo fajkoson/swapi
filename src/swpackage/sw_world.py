@@ -28,7 +28,7 @@ async def main(interval=5) -> None:
         else:
             logging.warning(f"invalid logging level: {level_str} for module: {module}")
 
-    yaml_manager = YamlManager(config["output_path"] + "\\output.yaml", config)
+    yaml_manager = YamlManager(config["output_path"], config)
 
     output_data: Dict[str, List[Dict[str, Any]]] = {
     "people": [],
