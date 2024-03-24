@@ -13,6 +13,7 @@ number of datasets and best is to keep it on default.
 ## Examples of usage
 - eg1.: swpackage
 - eg2.: swpackage --interval 3 (default interval is 5 sec)
+- eg3.: tests (this will run all the tests prepared in pytest)
 
 
 ## Implemented functionalities (more in .docs/origtask.md)
@@ -22,10 +23,10 @@ number of datasets and best is to keep it on default.
         - create package
         - whole app rewritten as async
         - create dockerfile for creating app docker image (guide in .docs/docker.md)
-    - todo:
         - write basic tests (app is able to starts) for sw world app and output yaml data has correct format
         - mock calling sw api in tests
         - add mypy check within tests
+    - todo:
         - create example of proto file with one service and one call
         - using grpcio-tools library parse proto file and get name of service and call (could be standalone script)
 

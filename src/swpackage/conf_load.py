@@ -11,9 +11,9 @@ class ConfLoader:
 
     def find_conf_path(self) -> str:
         """find dynamic path to config.json."""
-        # project root (../SWAPI/src/)
+
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  
-        # path to the config.json (../SWAPI/src/config/)
+
         config_path = os.path.join(base_dir, 'config', 'config.json') 
         logger.info(f"config path is: {config_path}")
         return config_path
@@ -36,7 +36,7 @@ class ConfLoader:
         except FileNotFoundError as e:
             logger.exception(f"configuration file not found at {self.file_path}: {e}")
             raise e
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
             logger.exception("Error decoding JSON from the configuration file.")
             raise e
 
@@ -58,29 +58,26 @@ class ConfLoader:
         for param in req_param:
             if param not in self.config:
                 logger.error(f"missing required configuration parameter: {param}")
-                raise ValueError(f"missing required configuration parameter: {param}")
+                return False
             
         if "logging_level" in self.config:
             if not isinstance(self.config["logging_level"], dict):
                 logger.error("logging_level must be a dictionary")
-                raise ValueError("logging_level must be a dictionary")
+                return False
             
-            # check if each modules logging level is a valid logging level string
             valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "EXCEPTION"]
             for module, level in self.config["logging_level"].items():
                 if level.upper() not in valid_levels:
                     logger.error(f"invalid logging level '{level}' for module '{module}'")
-                    raise ValueError(f"invalid logging level '{level}' for module '{module}'")
+                    return False
 
-
-        # check ranges
         if not (1 <= self.config["max_person"] <= 82):
             logger.error("max_person range is 1-82")
-            raise ValueError("max_person range is 1-82")
+            return False
     
         if not (1 <= self.config["max_planets"] <= 60):
             logger.error("max_planets range is 1-60")
-            raise ValueError("max_planets range is 1-60")
+            return False
     
         return True
 
@@ -89,6 +86,9 @@ class ConfLoader:
         if self.validate_config():
             logger.info("configuration has been validated")
             return self.config
+        else:
+            logger.error("configuration validation failed")
+            raise ValueError("configuration validation failed")
 
 if __name__ == "__main__":
     print(ConfLoader().get_config())

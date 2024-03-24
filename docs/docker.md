@@ -4,6 +4,7 @@
 ### NOTE: dont forget to enable virtualisation in BIOS.
 
 ## How to create container:
+```
 1. docker --version
 2. docker run hello-world 
 3. create image (call it from the root folder of the project where Dockerfile is)
@@ -20,3 +21,4 @@ docker stop swapicontainer
 docker rm swapicontainer
 9. remove image when no longer needed
 docker rmi swapidocker
+```

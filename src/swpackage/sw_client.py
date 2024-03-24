@@ -25,6 +25,7 @@ class SWFetcher:
             except Exception as err:
                 logger.exception(f"exception occured {err}")
                 raise Exception(f"an unexpected error occurred while fetching person: {err}") from err
+            
     @time_decorator
     async def fetch_planet(self, planet_id: int) -> dict:
         """fetch planet by ID and return name and terrain"""
@@ -42,6 +43,7 @@ class SWFetcher:
             except Exception as err:
                 logger.exception(f"exception occured {err}")
                 raise Exception(f"an unexpected error occurred while fetching planet: {err}") from err
+            
     @time_decorator
     async def check_base_url(self) -> None:
         """check if the base URL is reachable."""
@@ -49,6 +51,6 @@ class SWFetcher:
             try:
                 async with session.get(self.config['base_url']) as response:
                     if response.status != self.config['status_code_OK']:
-                        logger.error(f"base URL check failed with status code: {response.status_code}. Possible API issue...")   
+                        logger.error(f"base URL check failed with status code: {response.status}. Possible API issue...")   
             except aiohttp.ClientError as e:
                 logger.error(f"failed to reach the base URL. {e}")

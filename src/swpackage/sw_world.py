@@ -2,6 +2,7 @@ import argparse
 import random
 import logging
 import asyncio
+from typing import Dict, List, Any
 from swpackage.conf_load import ConfLoader
 from swpackage.sw_client import SWFetcher
 from swpackage.yaml_mngr import YamlManager
@@ -10,7 +11,6 @@ from swpackage.decorators import time_decorator
 @time_decorator
 async def main(interval=5) -> None:
     config = ConfLoader().get_config()
-    # basic log config
     logging.basicConfig(
         level=logging.ERROR,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -28,18 +28,15 @@ async def main(interval=5) -> None:
         else:
             logging.warning(f"invalid logging level: {level_str} for module: {module}")
 
-    # yaml manager init. with output path
-    # added config due to another parameter in YamlManager
     yaml_manager = YamlManager(config["output_path"] + "\\output.yaml", config)
 
-    output_data = {
-        "people": [],
-        "planets": []
+    output_data: Dict[str, List[Dict[str, Any]]] = {
+    "people": [],
+    "planets": []
     }
 
     fetcher = SWFetcher(config) 
 
-    # generate and fetch data, check for duplicities..
     while (len(output_data["people"]) < config["count_of_people_and_planet"] or
            len(output_data["planets"]) < config["count_of_people_and_planet"]):
         if len(output_data["people"]) < config["count_of_people_and_planet"]:
@@ -66,17 +63,14 @@ async def main(interval=5) -> None:
             except Exception as e:
                 logger.error(f"an error occurred while fetching planet with ID {planet_id}: {e}")
 
-        # wait for interval [sec]
         await asyncio.sleep(interval)
 
-        # break the loop if both limits were reached
         if (len(output_data["people"]) >= config["count_of_people_and_planet"] and
             len(output_data["planets"]) >= config["count_of_people_and_planet"]):
 
             break
-    # check if there anything to new append
+
     if await yaml_manager.has_new_data_to_append(output_data):
-        # append the data instead of overwriting the file
         await yaml_manager.append_to_yaml(output_data)
     else:
         logger.warning("no new unique data to append. The OUTPUT file remains unchanged")
@@ -85,7 +79,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='fetch SWAPI data.')
     parser.add_argument('--interval', type=int, default=5, help='interval in seconds')
     args = parser.parse_args()
-    #main(args.interval)
     asyncio.run(main(args.interval))
 
 def run_main():

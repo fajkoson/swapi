@@ -20,13 +20,17 @@ setup(
             'pytest>=6.2.2', 
             'pytest-asyncio>=0.14.0',
             'mypy>=1.9.0',
+            'pytest>=8.1.1',
+            'pytest-mock>=3.12.0',
+            'types-aiofiles>=23.2.0.20240311',
+            'types-PyYAML>=6.0.12.20240311',
         ],
     }, 
     
     entry_points={
         'console_scripts': [
             'swpackage=swpackage.sw_world:run_main',
-            
+            'tests=tests.run_tests:run_main',            
         ],
     },
     include_package_data=True,  
