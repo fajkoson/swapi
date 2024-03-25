@@ -28,10 +28,8 @@ class ConfLoader:
             running_in_container = os.getenv("RUNNING_IN_CONTAINER", "false").lower() == "true"
 
             if running_in_container:
-                #self.config['output_path'] = self.config.get('container_output_path', '/app/data')
                 output_dir = self.config.get('container_output_path', '/app/data')
             else:
-                #self.config['output_path'] = self.config.get('default_output_path', 'C:\\SW_OUTPUT')
                 output_dir = self.config.get('default_output_path', 'C:\\SW_OUTPUT')
 
             output_dir = os.path.normpath(output_dir)
