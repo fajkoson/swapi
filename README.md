@@ -27,8 +27,8 @@ number of datasets and best is to keep it on default.
         - mock calling sw api in tests
         - add mypy check within tests
     - todo:
-        - create example of proto file with one service and one call
-        - using grpcio-tools library parse proto file and get name of service and call (could be standalone script)
+        - crete tests for all *.py files and run them before call of main function
+        - comment all functions with descriptions of parameters and return values
 
 ## About
 This branch was created solely for purpose of training.
